@@ -269,8 +269,8 @@ if __name__ == "__main__":
 							if IS_PYTHON_3:
 								stdout = stdout.decode()
 							for i in stdout.split('\n'):
-							j = i.split(': ', 1)
-						    data.append(j)
+								j = i.split(': ', 1)
+						    	data.append(j)
 							cpu_utilized = data[5][1]
 							cpu_efficiency = data[6][1]
 							mem_utilized = data[8][1]
