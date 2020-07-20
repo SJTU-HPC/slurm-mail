@@ -12,7 +12,7 @@
 
 <p>Dear $USER,</p>
 
-<p>Your job $JOB_ID has started on $CLUSTER.</p>
+<p>Your job $JOB_ID has started on SJTU Pi Supercomputer.</p>
 
 <p>Details about the job can be found in the table below:</p>
 
