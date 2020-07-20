@@ -258,23 +258,23 @@ if __name__ == "__main__":
 							logging.error(stdout)
 							logging.error(stderr)
 
-                        cpu_utilized = ' '
-                        cpu_efficiency = ' '
-                        mem_utilized = ' '
-                        mem_efficiency = ' '
-                        cmd = '%s %d' % (seffExe, jobId)
-                        rtnCode, stdout, stderr = runCommand(cmd)
-                        if rtnCode == 0:
-                            data = []
-                            if IS_PYTHON_3:
-                                stdout = stdout.decode()
-                            for i in stdout.split('\n'):
-                                j = i.split(': ', 1)
-                                data.append(j)
-                            cpu_utilized = data[5][1]
-                            cpu_efficiency = data[6][1]
-                            mem_utilized = data[8][1]
-                            mem_efficiency = data[9][1]
+						cpu_utilized = ' '
+						cpu_efficiency = ' '
+						mem_utilized = ' '
+						mem_efficiency = ' '
+						cmd = '%s %d' % (seffExe, jobId)
+						rtnCode, stdout, stderr = runCommand(cmd)
+						if rtnCode == 0:
+							data = []
+							if IS_PYTHON_3:
+								stdout = stdout.decode()
+							for i in stdout.split('\n'):
+							j = i.split(': ', 1)
+						    data.append(j)
+							cpu_utilized = data[5][1]
+							cpu_efficiency = data[6][1]
+							mem_utilized = data[8][1]
+							mem_efficiency = data[9][1]
 
 						tpl = Template(getFileContents(jobTableTpl))
 						jobTable = tpl.substitute(
@@ -293,10 +293,10 @@ if __name__ == "__main__":
 							STDOUT=stdoutFile,
 							STDERR=stderrFile,
 							WALLCLOCK=wallclock,
-							WALLCLOCK_ACCURACY=wallclockAccuracy
-							CPU_Utilized=cpu_utilized
-							CPU_Efficiency=cpu_efficiency
-							Memory_Utilized=mem_utilized
+							WALLCLOCK_ACCURACY=wallclockAccuracy,
+							CPU_Utilized=cpu_utilized,
+							CPU_Efficiency=cpu_efficiency,
+							Memory_Utilized=mem_utilized,
 							Memory_Efficiency=mem_efficiency
 						)
 
