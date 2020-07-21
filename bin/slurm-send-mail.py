@@ -98,7 +98,7 @@ def runCommand(cmd):
 	return (process.returncode, stdout, stderr)
 
 def runCMD(cmd):
-    '''
+	'''
 	To run '%s %d | egrep "CPU|Memory"'.
 	runCommand() can't recognize '|'.
 	'''
