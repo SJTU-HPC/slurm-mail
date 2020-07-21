@@ -270,7 +270,7 @@ if __name__ == "__main__":
 								stdout = stdout.decode()
 							for i in stdout.split('\n'):
 								j = i.split(': ', 1)
-						    	data.append(j)
+								data.append(j)
 							cpu_utilized = data[5][1]
 							cpu_efficiency = data[6][1]
 							mem_utilized = data[8][1]
@@ -335,7 +335,7 @@ if __name__ == "__main__":
 
 						body = MIMEText(body, 'html')
 						msg.attach(body)
-						s = smtplib.SMTP('localhost')
+						s = smtplib.SMTP('172.16.0.134')
 						logging.info('sending e-mail to: %s using %s for job %d (%s)' % (user, userEmail, jobId, state))
 						s.sendmail(emailFromUserAddress, userEmail, msg.as_string())
 						logging.info('deleting: %s' % f)
