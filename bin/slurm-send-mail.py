@@ -188,7 +188,7 @@ if __name__ == "__main__":
 
 				if state in ['Began', 'Ended', 'Failed']:
 					# get job info from sacct
-					cmd = '%s -j %d -p -n --fields=JobId,Partition,JobName,Start,End,State,nnodes,WorkDir,Elapsed,ExitCode,Comment,Cluster,User,NodeList,TimeLimit' % (sacctExe, jobId)
+					cmd = '%s -j %d -p -n --fields=JobId,Partition,JobName,Start,End,State,nnodes,WorkDir,Elapsed,ExitCode,Comment,Cluster,User,NodeList,TimeLimit,TimelimitRaw' % (sacctExe, jobId)
 					rtnCode, stdout, stderr = runCommand(cmd)
 					if rtnCode == 0:
 						body = ''
