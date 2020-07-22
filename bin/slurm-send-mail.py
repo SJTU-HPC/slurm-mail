@@ -150,6 +150,7 @@ if __name__ == "__main__":
 		sacctExe = config.get(section, 'sacctExe')
 		scontrolExe = config.get(section, 'scontrolExe')
 		seffExe = config.get(section, 'seffExe')
+		clusterName = config.get(section, 'clusterName')
 		smtpServer = config.get(section, 'smtpServer')
 		datetimeFormat = config.get(section, 'datetimeFormat')
 	except Exception as e:
@@ -226,10 +227,8 @@ if __name__ == "__main__":
 								nodelist = data[13]
 								if data[14] == 'UNLIMITED':
 									wallclock = 'UNLIMITED'
-									wallclockSeconds = 0
 								else:
 									wallclock = data[14].replace('T', ' ')
-									wallclockSeconds = int(data[15]) * 60
 								if state != 'Began':
 									endTS = int(data[4])
 									end = datetime.fromtimestamp(endTS).strftime(datetimeFormat)
@@ -243,10 +242,6 @@ if __name__ == "__main__":
 										hours, mins, secs = elapsed.split(':')
 										days = 0
 									elapsedSeconds = (int(days) * 86400) + (int(hours) * 3600) + (int(mins) * 60) + int(secs)
-									if wallclockSeconds > 0:
-										wallclockAccuracy = '%.2f%%' % ((float(elapsedSeconds) / float(wallclockSeconds)) * 100.0)
-									else:
-										wallclockAccuracy = 'N/A'
 									exitCode = data[9]
 									jobState = data[5]
 									if jobState == 'TIMEOUT':
@@ -317,7 +312,7 @@ if __name__ == "__main__":
 								JOB_ID=jobId,
 								USER=pwd.getpwnam(user).pw_gecos,
 								JOB_TABLE=jobTable,
-								CLUSTER=cluster,
+								CLUSTER=clusterName,
 								EMAIL_FROM=emailFromName
 							)
 						elif state == 'Ended' or state == 'Failed':
@@ -333,7 +328,7 @@ if __name__ == "__main__":
 								JOB_ID=jobId,
 								USER=pwd.getpwnam(user).pw_gecos,
 								JOB_TABLE=jobTable,
-								CLUSTER=cluster,
+								CLUSTER=clusterName,
 								EMAIL_FROM=emailFromName
 							)
 
