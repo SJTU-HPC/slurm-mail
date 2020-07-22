@@ -188,7 +188,7 @@ if __name__ == "__main__":
 
 				if state in ['Began', 'Ended', 'Failed']:
 					# get job info from sacct
-					cmd = '%s -j %d -p -n --fields=JobId,Partition,JobName,Start,End,State,nnodes,WorkDir,Elapsed,ExitCode,Comment,Cluster,User,NodeList,TimeLimit,TimelimitRaw' % (sacctExe, jobId)
+					cmd = '%s -j %d -p -n --fields=JobId,Partition,JobName,Start,End,State,nnodes,WorkDir,Elapsed,ExitCode,Comment,Cluster,User,NodeList,TimeLimit' % (sacctExe, jobId)
 					rtnCode, stdout, stderr = runCommand(cmd)
 					if rtnCode == 0:
 						body = ''
@@ -246,7 +246,6 @@ if __name__ == "__main__":
 									jobState = data[5]
 									if jobState == 'TIMEOUT':
 										jobState = 'WALLCLOCK EXCEEDED'
-										wallclockAccuracy = '0%'
 						cmd = '%s -o show job=%d' % (scontrolExe, jobId)
 						rtnCode, stdout, stderr = runCommand(cmd)
 						if rtnCode == 0:
