@@ -247,7 +247,7 @@ if __name__ == "__main__":
 									if wallclockSeconds > 0:
 										wallclockAccuracy = '%.2f%%' % ((float(elapsedSeconds) / float(wallclockSeconds)) * 100.0)
 									else:
-										wallclockAccuracy = 'N/A'									
+										wallclockAccuracy = 'N/A'
 									exitCode = data[9]
 									jobState = data[5]
 									if jobState == 'TIMEOUT':
