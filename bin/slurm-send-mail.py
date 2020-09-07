@@ -305,6 +305,7 @@ if __name__ == "__main__":
 							STDOUT=stdoutFile,
 							STDERR=stderrFile,
 							WALLCLOCK=wallclock,
+							WALLCLOCK_ACCURACY=wallclockAccuracy,
 							CPU_Utilized=cpu_utilized,
 							CPU_Efficiency=cpu_efficiency,
 							Memory_Utilized=mem_utilized,
