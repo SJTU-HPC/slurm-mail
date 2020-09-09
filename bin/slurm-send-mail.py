@@ -97,6 +97,16 @@ def runCommand(cmd):
 	stdout, stderr = process.communicate()
 	return (process.returncode, stdout, stderr)
 
+def runCMD(cmd):
+	'''
+	To run '%s %d | egrep "CPU|Memory"'.
+	runCommand() can't recognize '|'.
+	'''
+	logging.debug('running %s' % cmd)
+	process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+	stdout, stderr = process.communicate()
+	return (process.returncode, stdout, stderr)
+
 if __name__ == "__main__":
 
 	parser = argparse.ArgumentParser(description='Send pending Slurm e-mails to users', add_help=True)
@@ -139,6 +149,9 @@ if __name__ == "__main__":
 		emailFromName = config.get(section, 'emailFromName')
 		sacctExe = config.get(section, 'sacctExe')
 		scontrolExe = config.get(section, 'scontrolExe')
+		seffExe = config.get(section, 'seffExe')
+		clusterName = config.get(section, 'clusterName')
+		smtpServer = config.get(section, 'smtpServer')
 		datetimeFormat = config.get(section, 'datetimeFormat')
 	except Exception as e:
 		die('Error: %s' % e)
@@ -150,6 +163,7 @@ if __name__ == "__main__":
 
 	checkFile(sacctExe)
 	checkFile(scontrolExe)
+	checkFile(seffExe)
 	css = getFileContents(stylesheet)
 
 	if not os.access(spoolDir, os.R_OK | os.W_OK):
@@ -256,6 +270,24 @@ if __name__ == "__main__":
 							logging.error(stdout)
 							logging.error(stderr)
 
+						cpu_utilized = ' '
+						cpu_efficiency = ' '
+						mem_utilized = ' '
+						mem_efficiency = ' '
+						cmd = '%s %d | egrep "CPU|Memory"' % (seffExe, jobId)
+						rtnCode, stdout, stderr = runCMD(cmd)
+						if rtnCode == 0:
+							data = []
+							if IS_PYTHON_3:
+								stdout = stdout.decode()
+							for i in stdout.split('\n'):
+								j = i.split(': ', 1)
+								data.append(j)
+							cpu_utilized = data[0][1]
+							cpu_efficiency = data[1][1]
+							mem_utilized = data[2][1]
+							mem_efficiency = data[3][1]
+
 						tpl = Template(getFileContents(jobTableTpl))
 						jobTable = tpl.substitute(
 							JOB_ID=jobId,
@@ -273,7 +305,11 @@ if __name__ == "__main__":
 							STDOUT=stdoutFile,
 							STDERR=stderrFile,
 							WALLCLOCK=wallclock,
-							WALLCLOCK_ACCURACY=wallclockAccuracy
+							WALLCLOCK_ACCURACY=wallclockAccuracy,
+							CPU_Utilized=cpu_utilized,
+							CPU_Efficiency=cpu_efficiency,
+							Memory_Utilized=mem_utilized,
+							Memory_Efficiency=mem_efficiency
 						)
 
 						if state == 'Began':
@@ -283,7 +319,7 @@ if __name__ == "__main__":
 								JOB_ID=jobId,
 								USER=pwd.getpwnam(user).pw_gecos,
 								JOB_TABLE=jobTable,
-								CLUSTER=cluster,
+								CLUSTER=clusterName,
 								EMAIL_FROM=emailFromName
 							)
 						elif state == 'Ended' or state == 'Failed':
@@ -299,7 +335,7 @@ if __name__ == "__main__":
 								JOB_ID=jobId,
 								USER=pwd.getpwnam(user).pw_gecos,
 								JOB_TABLE=jobTable,
-								CLUSTER=cluster,
+								CLUSTER=clusterName,
 								EMAIL_FROM=emailFromName
 							)
 
@@ -311,7 +347,7 @@ if __name__ == "__main__":
 
 						body = MIMEText(body, 'html')
 						msg.attach(body)
-						s = smtplib.SMTP('localhost')
+						s = smtplib.SMTP(smtpServer)
 						logging.info('sending e-mail to: %s using %s for job %d (%s)' % (user, userEmail, jobId, state))
 						s.sendmail(emailFromUserAddress, userEmail, msg.as_string())
 						logging.info('deleting: %s' % f)

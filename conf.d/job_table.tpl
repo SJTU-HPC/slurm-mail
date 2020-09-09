@@ -16,7 +16,7 @@
 		<td>$NODES</td>
 	</tr>
 	<tr>
-		<td>Wallclock:</td>
+		<td>Wallclock Limit:</td>
 		<td>$WALLCLOCK</td>
 	</tr>
 	<tr>
@@ -30,6 +30,22 @@
 	<tr>
 		<td>Work dir:</td>
 		<td>$WORKDIR</td>
+	</tr>
+		<tr>
+		<td>CPU Utilized:</td>
+		<td>$CPU_Utilized</td>
+	</tr>
+	<tr>
+		<td>CPU Efficiency:</td>
+		<td>$CPU_Efficiency</td>
+	</tr>
+	<tr>
+		<td>Memory Utilized:</td>
+		<td>$Memory_Utilized</td>
+	</tr>
+	<tr>
+		<td>Memory Efficiency:</td>
+		<td>$Memory_Efficiency</td>
 	</tr>
 	<tr>
 		<td>Comment:</td>
@@ -46,11 +62,6 @@
 	<tr class="jobEnd">
 		<td>Elapsed:</td>
 		<td>$ELAPSED</td>
-	</tr>
-	<tr class="jobEnd">
-		<td>Wallclock Accuracy:</td>
-		<td>$WALLCLOCK_ACCURACY</td>
-	</tr>
 	<tr class="jobEnd">
 		<td>Node List:</td>
 		<td>$NODE_LIST</td>
