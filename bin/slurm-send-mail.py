@@ -150,6 +150,7 @@ if __name__ == "__main__":
 		sacctExe = config.get(section, 'sacctExe')
 		scontrolExe = config.get(section, 'scontrolExe')
 		seffExe = config.get(section, 'seffExe')
+		stipExe = config.get(section, 'stipExe')
 		clusterName = config.get(section, 'clusterName')
 		smtpServer = config.get(section, 'smtpServer')
 		datetimeFormat = config.get(section, 'datetimeFormat')
@@ -164,6 +165,7 @@ if __name__ == "__main__":
 	checkFile(sacctExe)
 	checkFile(scontrolExe)
 	checkFile(seffExe)
+	checkFile(stipExe)
 	css = getFileContents(stylesheet)
 
 	if not os.access(spoolDir, os.R_OK | os.W_OK):
@@ -324,10 +326,17 @@ if __name__ == "__main__":
 							)
 						elif state == 'Ended' or state == 'Failed':
 							tpl = Template(getFileContents(endedTpl))
+							stip_suggestion = ''
 							if state == 'Failed':
 								endTxt = 'failed'
 							else:
 								endTxt = 'ended'
+								cmd = '%s %d' % (stipExe, jobId)
+								rtnCode, stdout, _ = runCMD(cmd)
+								if rtnCode == 0 and stdout.split('\n') >= 1:
+									lines = stdout.split('\n')
+									for line in lines:
+										stip_suggestion += "<p class=\"stip_style\">{}</p>\n".format(line)
 
 							body = tpl.substitute(
 								CSS=css,
@@ -336,6 +345,7 @@ if __name__ == "__main__":
 								USER=pwd.getpwnam(user).pw_gecos,
 								JOB_TABLE=jobTable,
 								CLUSTER=clusterName,
+								STIP_SUGGESTION=stip_suggestion,
 								EMAIL_FROM=emailFromName
 							)
 
