@@ -6,3 +6,9 @@ th, td {
 	padding: 5px;
 	text-align: left;
 }
+
+.stip_style {
+	font-family: Courier;
+	color: red;
+	font-size:16px;
+}

@@ -14,6 +14,8 @@
 
 $JOB_TABLE
 
+$STIP_SUGGESTION
+
 <p>Regards,</p>
 
 <p>$EMAIL_FROM</p>
